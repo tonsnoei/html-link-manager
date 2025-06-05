@@ -16,6 +16,8 @@ const deleteGroupBtn = document.getElementById('deleteGroupBtn');
 const cancelLinkBtn = document.getElementById('cancelLinkBtn');
 const deleteLinkBtn = document.getElementById('deleteLinkBtn');
 const toggleEditModeBtn = document.getElementById('toggleEditMode');
+const exportDataBtn = document.getElementById('exportDataBtn');
+const importDataBtn = document.getElementById('importDataBtn');
 
 // Initialize app
 function initApp() {
@@ -87,6 +89,9 @@ function setupEventListeners() {
     groupsContainer.addEventListener('click', handleContainerClick);
     
     toggleEditModeBtn.addEventListener('click', toggleEditMode);
+    
+    exportDataBtn.addEventListener('click', exportData);
+    importDataBtn.addEventListener('click', importData);
 }
 
 // Toggle edit mode
@@ -251,6 +256,50 @@ function deleteLink(groupId = null, linkId = null) {
         renderGroups();
         linkModal.close();
     }
+}
+
+// Export data to JSON file
+function exportData() {
+    const data = JSON.stringify(groups, null, 2);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'linkbox_export.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Import data from JSON file
+function importData() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (!Array.isArray(importedData)) {
+                    throw new Error('Imported data is not an array');
+                }
+                
+                groups = importedData;
+                saveToLocalStorage();
+                alert('Data imported successfully!');
+                renderGroups();
+            } catch (error) {
+                alert('Error importing data: ' + error.message);
+            }
+        };
+        reader.readAsText(file);
+    });
+    fileInput.click();
 }
 
 // Save groups to local storage
