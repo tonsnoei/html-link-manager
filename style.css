@@ -144,7 +144,8 @@ h2 {
 
 .move-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 2px;
     margin-right: 5px;
 }
 
