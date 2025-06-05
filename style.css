@@ -19,6 +19,11 @@ header {
     margin-bottom: 20px;
 }
 
+header > div {
+    display: flex;
+    gap: 10px;
+}
+
 #groupsContainer {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

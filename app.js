@@ -2,6 +2,7 @@
 let groups = JSON.parse(localStorage.getItem('linkbox_groups')) || [];
 let currentGroupId = null;
 let currentLinkId = null;
+let editMode = false;
 
 // DOM elements
 const groupModal = document.getElementById('groupModal');
@@ -14,11 +15,18 @@ const cancelGroupBtn = document.getElementById('cancelGroupBtn');
 const deleteGroupBtn = document.getElementById('deleteGroupBtn');
 const cancelLinkBtn = document.getElementById('cancelLinkBtn');
 const deleteLinkBtn = document.getElementById('deleteLinkBtn');
+const toggleEditModeBtn = document.getElementById('toggleEditMode');
 
 // Initialize app
 function initApp() {
+    updateEditModeState();
     renderGroups();
     setupEventListeners();
+}
+
+// Update edit mode state and button text
+function updateEditModeState() {
+    toggleEditModeBtn.innerText = editMode ? "Edit Mode: On" : "Edit Mode: Off";
 }
 
 // Render all groups to the page
@@ -31,10 +39,12 @@ function renderGroups() {
         groupElement.innerHTML = `
             <div class="group-header">
                 <h2>${group.name}</h2>
+                ${editMode ? `
                 <div class="group-actions">
                     <button class="edit-group" data-group-id="${group.id}">✏️</button>
                     <button class="delete-group" data-group-id="${group.id}">🗑️</button>
                 </div>
+                ` : ''}
             </div>
             <ul class="link-list">
                 ${group.links.map(link => `
@@ -42,6 +52,7 @@ function renderGroups() {
                         <div class="link-info">
                             <a href="${link.url}" target="_blank">${link.title}</a>
                         </div>
+                        ${editMode ? `
                         <div class="link-actions">
                             <button class="edit-link" 
                                 data-group-id="${group.id}" 
@@ -50,10 +61,11 @@ function renderGroups() {
                                 data-group-id="${group.id}" 
                                 data-link-id="${link.id}">🗑️</button>
                         </div>
+                        ` : ''}
                     </li>
                 `).join('')}
             </ul>
-            <button class="add-link" data-group-id="${group.id}">+ Add Link</button>
+            ${editMode ? `<button class="add-link" data-group-id="${group.id}">+ Add Link</button>` : ''}
         `;
         groupsContainer.appendChild(groupElement);
     });
@@ -73,6 +85,15 @@ function setupEventListeners() {
     linkForm.addEventListener('submit', saveLink);
     
     groupsContainer.addEventListener('click', handleContainerClick);
+    
+    toggleEditModeBtn.addEventListener('click', toggleEditMode);
+}
+
+// Toggle edit mode
+function toggleEditMode() {
+    editMode = !editMode;
+    updateEditModeState();
+    renderGroups();  // Re-render to show/hide CRUD buttons
 }
 
 // Handle clicks on groups container
