@@ -91,6 +91,14 @@ header > div {
     user-select: none;
 }
 
+.group-subtitle {
+    font-size: 0.8em;
+    color: #777;
+    white-space: pre-wrap; /* Preserve newlines and wrap text */
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
 h2 {
     margin: 0;
     font-size: 1.25rem;

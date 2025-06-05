@@ -30,6 +30,13 @@ function initApp() {
         pageTitleElement.textContent = savedTitle;
     }
     
+    // Migrate existing groups to have subtitle field
+    groups.forEach(group => {
+        if (group.subtitle === undefined) {
+            group.subtitle = '';
+        }
+    });
+    
     updateEditModeState();
     renderGroups();
     setupEventListeners();
@@ -70,6 +77,7 @@ function renderGroups() {
                 </div>
                 ` : ''}
             </div>
+            <div class="group-subtitle">${group.subtitle}</div>
             <ul class="link-list">
                 ${group.links.map(link => `
                     <li class="link-item">
@@ -180,13 +188,16 @@ function handleContainerClick(e) {
 function openGroupModal(groupId = null) {
     currentGroupId = groupId;
     const groupNameInput = document.getElementById('groupName');
+    const groupSubtitleInput = document.getElementById('groupSubtitle');
     
     if (groupId) {
         const group = groups.find(g => g.id === groupId);
         groupNameInput.value = group.name;
+        groupSubtitleInput.value = group.subtitle;
         deleteGroupBtn.style.display = 'block';
     } else {
         groupNameInput.value = '';
+        groupSubtitleInput.value = '';
         deleteGroupBtn.style.display = 'none';
     }
     
@@ -227,11 +238,13 @@ function saveGroup(e) {
         // Update existing group
         const group = groups.find(g => g.id === currentGroupId);
         group.name = name;
+        group.subtitle = document.getElementById('groupSubtitle').value;
     } else {
         // Create new group
         const newGroup = {
             id: Date.now().toString(),
             name: name,
+            subtitle: document.getElementById('groupSubtitle').value,
             links: []
         };
         groups.push(newGroup);
