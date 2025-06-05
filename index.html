@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkBox Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>LinkBox Manager</h1>
+        <button id="addGroupBtn">+ Add Group</button>
+    </header>
+    
+    <main id="groupsContainer"></main>
+    
+    <!-- Group Modals -->
+    <dialog id="groupModal">
+        <form id="groupForm">
+            <label for="groupName">Group Name:</label>
+            <input type="text" id="groupName" required>
+            <div class="buttons">
+                <button type="button" id="cancelGroupBtn">Cancel</button>
+                <button type="submit">Save</button>
+                <button type="button" id="deleteGroupBtn" class="delete" style="display: none;">Delete</button>
+            </div>
+        </form>
+    </dialog>
+    
+    <!-- Link Modals -->
+    <dialog id="linkModal">
+        <form id="linkForm">
+            <label for="linkTitle">Title:</label>
+            <input type="text" id="linkTitle" required>
+            <label for="linkUrl">URL:</label>
+            <input type="url" id="linkUrl" required>
+            <div class="buttons">
+                <button type="button" id="cancelLinkBtn">Cancel</button>
+                <button type="submit">Save</button>
+                <button type="button" id="deleteLinkBtn" class="delete" style="display: none;">Delete</button>
+            </div>
+        </form>
+    </dialog>
+    
+    <script src="app.js"></script>
+</body>
+</html>

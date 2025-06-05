@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#groupsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.group-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 16px;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.group-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    font-size: 16px;
+    margin-left: 8px;
+}
+
+.group-actions button:hover {
+    color: #333;
+}
+
+.link-list {
+    list-style: none;
+}
+
+.link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.link-info a {
+    text-decoration: none;
+    color: #0366d6;
+}
+
+.link-info a:hover {
+    text-decoration: underline;
+}
+
+.link-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    margin-left: 4px;
+}
+
+.link-actions button:hover {
+    color: #333;
+}
+
+button#addLinkBtn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #f0f7ff;
+    border: 1px dashed #0366d6;
+    color: #0366d6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+dialog {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #0366d6;
+    color: white;
+}
+
+.cancel-btn, #cancelGroupBtn, #cancelLinkBtn {
+    background: #efefef;
+    color: #333;
+}
+
+.delete {
+    background: #d9534f;
+    margin-right: auto;
+}
