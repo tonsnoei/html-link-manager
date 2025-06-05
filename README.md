@@ -2,6 +2,8 @@
 
 A lightweight, client-side link management application that allows you to organize your bookmarks into groups and manage them efficiently. Built entirely using AI assistance in just 5-10 minutes of effort.
 
+![](docs/demo.png)
+
 ## 🚀 Features
 
 - **Group Management**: Create and organize links into custom groups
