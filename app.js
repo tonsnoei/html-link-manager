@@ -62,6 +62,7 @@ function renderGroups() {
         groupElement.setAttribute('data-group-index', index);
         groupElement.innerHTML = `
             <div class="group-header">
+                ${editMode ? '<div class="drag-handle" style="margin-right: 10px;">☰</div>' : ''}
                 <h2>${group.name}</h2>
                 ${editMode ? `
                 <div class="group-actions">
