@@ -35,6 +35,16 @@ function initApp() {
     setupEventListeners();
 }
 
+// Reorder groups array based on drag and drop
+function reorderGroups(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+    
+    const movedGroup = groups[fromIndex];
+    groups.splice(fromIndex, 1);
+    groups.splice(toIndex, 0, movedGroup);
+    saveToLocalStorage();
+}
+
 // Update edit mode state and button text
 function updateEditModeState() {
     toggleEditModeBtn.innerText = editMode ? "Edit Mode: On" : "Edit Mode: Off";
@@ -46,9 +56,10 @@ function updateEditModeState() {
 function renderGroups() {
     groupsContainer.innerHTML = '';
     
-    groups.forEach(group => {
+    groups.forEach((group, index) => {
         const groupElement = document.createElement('div');
         groupElement.className = 'group-box';
+        groupElement.setAttribute('data-group-index', index);
         groupElement.innerHTML = `
             <div class="group-header">
                 <h2>${group.name}</h2>
@@ -80,8 +91,20 @@ function renderGroups() {
             </ul>
             ${editMode ? `<button class="add-link" data-group-id="${group.id}">+ Add Link</button>` : ''}
         `;
+        
+        // Make only draggable in edit mode
+        groupElement.setAttribute('draggable', editMode);
         groupsContainer.appendChild(groupElement);
     });
+    
+    if (!editMode) {
+        // Cleanup any leftover event listeners for non-edit mode
+        groupsContainer.removeEventListener('dragstart', handleDragStart);
+        groupsContainer.removeEventListener('dragover', handleDragOver);
+        groupsContainer.removeEventListener('dragleave', handleDragLeave);
+        groupsContainer.removeEventListener('drop', handleDrop);
+        groupsContainer.removeEventListener('dragend', handleDragEnd);
+    }
 }
 
 // Event listeners setup
@@ -106,6 +129,13 @@ function setupEventListeners() {
     
     // Add event listener for title edit button
     editTitleBtn.addEventListener('click', handleTitleEdit);
+    
+    // Setup drag and drop events if in edit mode
+    groupsContainer.addEventListener('dragstart', handleDragStart);
+    groupsContainer.addEventListener('dragover', handleDragOver);
+    groupsContainer.addEventListener('dragleave', handleDragLeave);
+    groupsContainer.addEventListener('drop', handleDrop);
+    groupsContainer.addEventListener('dragend', handleDragEnd);
 }
 
 // Toggle edit mode
@@ -270,6 +300,69 @@ function deleteLink(groupId = null, linkId = null) {
         renderGroups();
         linkModal.close();
     }
+}
+
+// Drag and drop handlers
+let draggedIndex = null;
+
+function handleDragStart(e) {
+    if (!editMode) return;
+    
+    const groupBox = e.target.closest('.group-box');
+    if (!groupBox) return;
+    
+    draggedIndex = parseInt(groupBox.getAttribute('data-group-index'));
+    groupBox.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', draggedIndex);
+}
+
+function handleDragOver(e) {
+    if (!editMode) return;
+    e.preventDefault();
+    
+    const groupBox = e.target.closest('.group-box');
+    if (groupBox) {
+        groupBox.classList.add('drag-over');
+    }
+}
+
+function handleDragLeave(e) {
+    if (!editMode) return;
+    
+    const groupBox = e.target.closest('.group-box');
+    if (groupBox) {
+        groupBox.classList.remove('drag-over');
+    }
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    if (!editMode) return;
+    
+    const groupBox = e.target.closest('.group-box');
+    if (!groupBox) return;
+    
+    const dropIndex = parseInt(groupBox.getAttribute('data-group-index'));
+    const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+    
+    groupBox.classList.remove('drag-over');
+    reorderGroups(draggedIndex, dropIndex);
+    renderGroups();
+}
+
+function handleDragEnd(e) {
+    if (!editMode) return;
+    
+    const groupBox = e.target.closest('.group-box');
+    if (groupBox) {
+        groupBox.classList.remove('dragging');
+    }
+    
+    // Cleanup all drag-over effects
+    document.querySelectorAll('.group-box').forEach(box => {
+        box.classList.remove('drag-over');
+    });
 }
 
 // Export data to JSON file
