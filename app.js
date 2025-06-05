@@ -347,6 +347,11 @@ function handleDrop(e) {
     const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
     
     groupBox.classList.remove('drag-over');
+    
+    // Temporarily highlight the drop target
+    groupBox.classList.add('drag-target-highlight');
+    setTimeout(() => groupBox.classList.remove('drag-target-highlight'), 1000);
+    
     swapGroups(draggedIndex, dropIndex);
     renderGroups();
 }
