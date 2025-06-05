@@ -55,19 +55,22 @@ header > div {
     padding: 16px;
     position: relative;
     cursor: grab;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .group-box.dragging {
     border: 2px solid #0366d6;
     box-shadow: 0 4px 15px rgba(3, 102, 214, 0.2);
+    z-index: 10;
+    opacity: 0.9;
+    transform: scale(1.05);
 }
 
 .drag-over {
     background-color: #f0f7ff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    transform: scale(1.03);
     z-index: 1;
-    transition: all 0.2s;
 }
 
 .group-header {

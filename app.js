@@ -35,13 +35,12 @@ function initApp() {
     setupEventListeners();
 }
 
-// Reorder groups array based on drag and drop
-function reorderGroups(fromIndex, toIndex) {
+// Swap groups array based on drag and drop
+function swapGroups(fromIndex, toIndex) {
     if (fromIndex === toIndex) return;
     
-    const movedGroup = groups[fromIndex];
-    groups.splice(fromIndex, 1);
-    groups.splice(toIndex, 0, movedGroup);
+    // Swap the groups
+    [groups[fromIndex], groups[toIndex]] = [groups[toIndex], groups[fromIndex]];
     saveToLocalStorage();
 }
 
@@ -348,7 +347,7 @@ function handleDrop(e) {
     const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
     
     groupBox.classList.remove('drag-over');
-    reorderGroups(draggedIndex, dropIndex);
+    swapGroups(draggedIndex, dropIndex);
     renderGroups();
 }
 
