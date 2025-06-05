@@ -79,13 +79,21 @@ function renderGroups() {
             </div>
             <div class="group-subtitle">${group.subtitle}</div>
             <ul class="link-list">
-                ${group.links.map(link => `
+                ${group.links.map((link, linkIndex) => `
                     <li class="link-item">
                         <div class="link-info">
                             <a href="${link.url}" target="_blank">${link.title}</a>
                         </div>
                         ${editMode ? `
                         <div class="link-actions">
+                            <div class="move-buttons">
+                                <button class="move-up" ${linkIndex === 0 ? 'disabled' : ''}
+                                    data-group-id="${group.id}" 
+                                    data-link-index="${linkIndex}">▲</button>
+                                <button class="move-down" ${linkIndex === group.links.length - 1 ? 'disabled' : ''}
+                                    data-group-id="${group.id}" 
+                                    data-link-index="${linkIndex}">▼</button>
+                            </div>
                             <button class="edit-link" 
                                 data-group-id="${group.id}" 
                                 data-link-id="${link.id}">✏️</button>
@@ -181,6 +189,18 @@ function handleContainerClick(e) {
         const groupId = e.target.dataset.groupId;
         const linkId = e.target.dataset.linkId;
         deleteLink(groupId, linkId);
+    }
+    // Move link up
+    else if (e.target.classList.contains('move-up')) {
+        const groupId = e.target.dataset.groupId;
+        const linkIndex = parseInt(e.target.dataset.linkIndex);
+        moveLinkUp(groupId, linkIndex);
+    }
+    // Move link down
+    else if (e.target.classList.contains('move-down')) {
+        const groupId = e.target.dataset.groupId;
+        const linkIndex = parseInt(e.target.dataset.linkIndex);
+        moveLinkDown(groupId, linkIndex);
     }
 }
 
@@ -313,6 +333,32 @@ function deleteLink(groupId = null, linkId = null) {
         renderGroups();
         linkModal.close();
     }
+}
+
+// Move link up in group
+function moveLinkUp(groupId, linkIndex) {
+    const group = groups.find(g => g.id === groupId);
+    if (linkIndex === 0) return;
+    
+    // Swap with previous
+    [group.links[linkIndex], group.links[linkIndex-1]] = 
+        [group.links[linkIndex-1], group.links[linkIndex]];
+    
+    saveToLocalStorage();
+    renderGroups();
+}
+
+// Move link down in group
+function moveLinkDown(groupId, linkIndex) {
+    const group = groups.find(g => g.id === groupId);
+    if (linkIndex === group.links.length - 1) return;
+    
+    // Swap with next
+    [group.links[linkIndex], group.links[linkIndex+1]] = 
+        [group.links[linkIndex+1], group.links[linkIndex]];
+    
+    saveToLocalStorage();
+    renderGroups();
 }
 
 // Drag and drop handlers

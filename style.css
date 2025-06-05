@@ -137,15 +137,47 @@ h2 {
     text-decoration: underline;
 }
 
-.link-actions button {
+.link-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.move-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+}
+
+.move-buttons button {
+    padding: 0;
+    margin: 0;
+    line-height: 0.8;
+    font-size: 0.7em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+}
+
+.move-buttons button:hover:not(:disabled) {
+    color: #333;
+}
+
+.move-buttons button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.link-actions > button {
     background: none;
     border: none;
     cursor: pointer;
     color: #777;
     margin-left: 4px;
+    padding: 0;
 }
 
-.link-actions button:hover {
+.link-actions > button:hover {
     color: #333;
 }
 
