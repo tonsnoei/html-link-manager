@@ -24,6 +24,24 @@ header > div {
     gap: 10px;
 }
 
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-title-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    font-size: 16px;
+}
+
+.edit-title-btn:hover {
+    color: #333;
+}
+
 #groupsContainer {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -18,9 +18,18 @@ const deleteLinkBtn = document.getElementById('deleteLinkBtn');
 const toggleEditModeBtn = document.getElementById('toggleEditMode');
 const exportDataBtn = document.getElementById('exportDataBtn');
 const importDataBtn = document.getElementById('importDataBtn');
+const pageTitleElement = document.getElementById('page-title');
+const editTitleBtn = document.getElementById('edit-title');
 
 // Initialize app
 function initApp() {
+    // Load page title from localStorage if available
+    const savedTitle = localStorage.getItem('linkbox_title');
+    if (savedTitle) {
+        document.title = savedTitle;
+        pageTitleElement.textContent = savedTitle;
+    }
+    
     updateEditModeState();
     renderGroups();
     setupEventListeners();
@@ -29,6 +38,8 @@ function initApp() {
 // Update edit mode state and button text
 function updateEditModeState() {
     toggleEditModeBtn.innerText = editMode ? "Edit Mode: On" : "Edit Mode: Off";
+    // Show/hide title edit button based on edit mode
+    editTitleBtn.style.display = editMode ? 'inline-block' : 'none';
 }
 
 // Render all groups to the page
@@ -92,6 +103,9 @@ function setupEventListeners() {
     
     exportDataBtn.addEventListener('click', exportData);
     importDataBtn.addEventListener('click', importData);
+    
+    // Add event listener for title edit button
+    editTitleBtn.addEventListener('click', handleTitleEdit);
 }
 
 // Toggle edit mode
@@ -305,6 +319,24 @@ function importData() {
 // Save groups to local storage
 function saveToLocalStorage() {
     localStorage.setItem('linkbox_groups', JSON.stringify(groups));
+}
+
+// Edit page title handler
+function handleTitleEdit() {
+    const currentTitle = pageTitleElement.textContent;
+    const newTitle = prompt('Enter new page title:', currentTitle);
+    
+    if (newTitle === null) return; // User canceled prompt
+    
+    const trimmedTitle = newTitle.trim();
+    if (trimmedTitle) {
+        // Update title in the header
+        pageTitleElement.textContent = trimmedTitle;
+        // Update document title
+        document.title = trimmedTitle;
+        // Save to localStorage
+        localStorage.setItem('linkbox_title', trimmedTitle);
+    }
 }
 
 // Initialize the application
